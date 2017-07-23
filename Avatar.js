@@ -12,7 +12,7 @@
 *
 */
 
-import React, { Component } from 'react';
+import React ,{ Component } from 'react';
 
 import {
     Image,
@@ -22,6 +22,8 @@ import {
 } from 'react-native';
 
 import ImagePicker from 'react-native-image-picker';
+
+import PropTypes from 'prop-types';
 
 const AVATAR_OPTIONS = {
     title: 'Pick your image',
@@ -87,16 +89,16 @@ const styles = StyleSheet.create({
 
 export default class Avatar extends Component {
     static propTypes = {
-        interactive: React.PropTypes.bool,
-        onChange: React.PropTypes.func, // called on change when interactive is true
-        onChangeFailed: React.PropTypes.func, // called on change failure when interactive is true
-        onPress: React.PropTypes.func,
-        overlayColor: React.PropTypes.string, // On android only, should be the same than the backgroundColor of the surrounding View
-        pickerOptions: React.PropTypes.object, // TODO: Define better
-        placeholderSource: React.PropTypes.number,
-        placeholderURI: React.PropTypes.string,
+        interactive: PropTypes.bool,
+        onChange: PropTypes.func, // called on change when interactive is true
+        onChangeFailed: PropTypes.func, // called on change failure when interactive is true
+        onPress: PropTypes.func,
+        overlayColor: PropTypes.string, // On android only, should be the same than the backgroundColor of the surrounding View
+        pickerOptions: PropTypes.object, // TODO: Define better
+        placeholderSource: PropTypes.number,
+        placeholderURI: PropTypes.string,
         resizeMode: Image.propTypes.resizeMode,
-        size: React.PropTypes.oneOf([
+        size: PropTypes.oneOf([
             'default',
             'mini',
             'verySmall',
@@ -105,8 +107,8 @@ export default class Avatar extends Component {
         ]),
         source: Image.propTypes.source,
         style: Image.propTypes.style,
-        uri: React.PropTypes.string,
-        withBorder: React.PropTypes.bool,
+        uri: PropTypes.string,
+        withBorder: PropTypes.bool,
     };
 
     static defaultProps = {

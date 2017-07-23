@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/Osedea/react-native-interactive-avatar#readme",
   "dependencies": {
+    "prop-types": "^15.5.10",
     "react-native-image-picker": "^0.25.1"
   },
   "devDependencies": {
