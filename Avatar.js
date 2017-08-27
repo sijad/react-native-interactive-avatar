@@ -19,6 +19,7 @@ import {
     Platform,
     StyleSheet,
     TouchableWithoutFeedback,
+    PermissionsAndroid,
 } from 'react-native';
 
 import ImagePicker from 'react-native-image-picker';
@@ -117,38 +118,49 @@ export default class Avatar extends Component {
     state = {};
 
     handleInteractivePress = () => {
-        ImagePicker.showImagePicker(
-            {
-                ...AVATAR_OPTIONS,
-                ...this.props.pickerOptions,
-            },
-            (response) => {
-                if (response.error) {
-                    this.setState({
-                        failed: true,
-                    });
-                    if (this.props.onChangeFailed) {
-                        this.props.onChangeFailed();
-                    }
-                } else if (response.didCancel) {
-                    this.setState({
-                        failed: false,
-                    });
-                    // Do something on cancel ?
-                } else {
-                    const source = response;
-
-                    source.data = `data:image/jpeg;base64,${response.data}`;
-                    this.setState({
-                        source,
-                        failed: false,
-                    });
-                    if (this.props.onChange) {
-                        this.props.onChange(response);
-                    }
+        PermissionsAndroid.requestMultiple([
+            PermissionsAndroid.PERMISSIONS.CAMERA,
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        ]).then(permisions => {
+            for (let granted of Object.values(permisions)) {
+                if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+                    return;
                 }
             }
-        );
+
+            ImagePicker.showImagePicker(
+                {
+                    ...AVATAR_OPTIONS,
+                    ...this.props.pickerOptions,
+                },
+                (response) => {
+                    if (response.error) {
+                        this.setState({
+                            failed: true,
+                        });
+                        if (this.props.onChangeFailed) {
+                            this.props.onChangeFailed();
+                        }
+                    } else if (response.didCancel) {
+                        this.setState({
+                            failed: false,
+                        });
+                        // Do something on cancel ?
+                    } else {
+                        const source = response;
+
+                        source.data = `data:image/jpeg;base64,${response.data}`;
+                        this.setState({
+                            source,
+                            failed: false,
+                        });
+                        if (this.props.onChange) {
+                            this.props.onChange(response);
+                        }
+                    }
+                }
+            );
+        });
     };
 
     getAppropriateSource = () => {
@@ -179,8 +191,8 @@ export default class Avatar extends Component {
         <Image
             style={[
                 Platform.OS === 'ios'
-                    ? {}
-                    : { overlayColor: this.props.overlayColor },
+                ? {}
+                : { overlayColor: this.props.overlayColor },
                 styles.avatar,
                 styles[`${this.props.size}Avatar`],
                 this.props.withBorder ? styles.border : {},
